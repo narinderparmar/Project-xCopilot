@@ -1,1 +1,56 @@
-# Project-xCopilot
+# Project xCopilot
+
+**Status: concept and SDLC planning only. No supported binary or installer has been released.**
+
+Project xCopilot is the planned public distribution name for xCopilot: a local-first coding assistant with a Node.js/TypeScript CLI and authenticated locally hosted Web UI. It is designed to use local models by default and to reject paid/metered model inference.
+
+## Planned Capabilities
+
+- Repository-aware chat and approved single/multi-file edits.
+- Safe agent/tool workflow with plans, transactional undo, structured approvals, and isolated Git worktrees.
+- Dedicated local/PR code-review mode.
+- Bounded Recursive Language Model (RLM) handling for oversized inputs.
+- MCP client and local MCP Lab for inspect/lint/health/diff/test before enablement.
+- **Can I run it locally?** calculator for model/quantization fit, workload-based response-time ranges, and optional measured local benchmarks.
+- Future Plugin SDK/registry, ToolRadar reference plugin, private cross-device continuity, and IDE/ACP clients.
+
+## Source and License Status
+
+- Core implementation source is private and is **not currently open source**.
+- A future release may provide signed binaries, PowerShell installers, manifests, SBOM/provenance, and documentation from this public distribution project.
+- The intended use is non-commercial, but the complete product license, third-party/model notices, distribution rights, and signing identity are not finalized. No public artifact should be distributed until those release blockers are resolved.
+
+## Installation Safety
+
+There is no valid installation command yet. Future Windows installation will:
+
+1. download a PowerShell bootstrap from a **versioned GitHub Release** to disk;
+2. verify the expected Authenticode publisher;
+3. verify a signed checksum manifest and package hash;
+4. execute only after verification;
+5. ask separately before installing Ollama or downloading a model.
+
+Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be published.
+
+## Planning Documents
+
+- [xCopilot Concept repository](https://github.com/narinderparmar/xCopilot-Concept)
+- [Concept](https://github.com/narinderparmar/xCopilot-Concept/blob/main/CONCEPT.md)
+- [SDLC document index](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/README.md)
+- [Deep document review](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/11-document-review.md)
+- [Local Model Feasibility Advisor](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/12-local-model-feasibility-advisor.md)
+
+## Helpful Evaluation Sources
+
+- [GitHub Copilot documentation](https://docs.github.com/en/copilot)
+- [OpenCode](https://opencode.ai/)
+- [`awesome-opensource-ai` Autonomous Coding Agents](https://github.com/alvinreal/awesome-opensource-ai#autonomous-coding-agents)
+- [Ollama documentation](https://docs.ollama.com/)
+- [Hugging Face JavaScript](https://huggingface.co/docs/huggingface.js/index)
+- [Recursive Language Models paper](https://arxiv.org/abs/2512.24601)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [MCP.Directory](https://mcp.directory/) and [MCP Playground](https://www.mcpplayground.tech/)
+- [ToolRadar documentation](https://toolradar.com/docs)
+- [IndiaAI](https://indiaai.gov.in/) and [AIKosh](https://aikosh.indiaai.gov.in/)
+
+Discovery catalogs and rankings are not cost, license, availability, or security authorities. Exact model artifacts/endpoints must be independently verified and disabled when evidence is stale.
