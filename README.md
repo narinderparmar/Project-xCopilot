@@ -12,6 +12,7 @@ Project xCopilot is the planned public distribution name for xCopilot: a local-f
 - Bounded Recursive Language Model (RLM) handling for oversized inputs.
 - MCP client and local MCP Lab for inspect/lint/health/diff/test before enablement.
 - **Can I run it locally?** calculator for model/quantization fit, workload-based response-time ranges, and optional measured local benchmarks.
+- Tiered multi-runtime local inference: managed llama.cpp, dedicated Ollama service support, profiled local APIs, role-specific deployments, and central RAM/VRAM/concurrency scheduling.
 - Future Plugin SDK/registry, ToolRadar reference plugin, private cross-device continuity, and IDE/ACP clients.
 
 ## Source and License Status
@@ -39,6 +40,7 @@ Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be publish
 - [SDLC document index](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/README.md)
 - [Deep document review](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/11-document-review.md)
 - [Local Model Feasibility Advisor](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/12-local-model-feasibility-advisor.md)
+- [Multi-Runtime Local and On-Device Inference](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/13-multi-runtime-local-inference.md)
 
 ## Helpful Evaluation Sources
 
@@ -46,6 +48,7 @@ Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be publish
 - [OpenCode](https://opencode.ai/)
 - [`awesome-opensource-ai` Autonomous Coding Agents](https://github.com/alvinreal/awesome-opensource-ai#autonomous-coding-agents)
 - [Ollama documentation](https://docs.ollama.com/)
+- [llama.cpp](https://github.com/ggml-org/llama.cpp), [MLC-LLM](https://github.com/mlc-ai/mlc-llm), [WebLLM](https://github.com/mlc-ai/web-llm), and [LiteRT-LM](https://github.com/google-ai-edge/LiteRT-LM)
 - [Hugging Face JavaScript](https://huggingface.co/docs/huggingface.js/index)
 - [Recursive Language Models paper](https://arxiv.org/abs/2512.24601)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
