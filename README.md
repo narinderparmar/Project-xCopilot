@@ -50,6 +50,7 @@ Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be publish
 - [Context Efficiency and Observability](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/17-context-efficiency-observability.md)
 - [Execution Placement and Elastic Parallelism](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/18-execution-placement-parallelism.md)
 - [Capacity and Quota Dashboard](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/19-capacity-quota-dashboard.md)
+- [Implementation Readiness and Action Plan](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/20-implementation-readiness-action-plan.md)
 
 ## Helpful Evaluation Sources
 
