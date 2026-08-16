@@ -13,8 +13,10 @@ Project xCopilot is the planned public distribution name for xCopilot: a local-f
 - MCP client and local MCP Lab for inspect/lint/health/diff/test before enablement.
 - **Can I run it locally?** calculator for model/quantization fit, workload-based response-time ranges, and optional measured local benchmarks.
 - Tiered multi-runtime local inference: managed llama.cpp, dedicated Ollama service support, profiled local APIs, role-specific deployments, and central RAM/VRAM/concurrency scheduling.
+- Capacity & Quota dashboard showing active/queued workload, local model resources, hosted free-model consumption/reservations, exact next reset or rolling recovery, and future remote-runner capacity.
+- Measured prompt/cache/context efficiency through deterministic manifests, local context bills, cache evidence, and quality-preserving regression budgets.
 - Future privacy-first durable project/user memory with provenance, explicit forget/redact/rollback, and evaluated reversible skill learning.
-- Future Plugin SDK/registry, ToolRadar reference plugin, private cross-device continuity, and IDE/ACP clients.
+- Future local stdio ACP editor interoperability, Plugin SDK/registry, ToolRadar reference plugin, execution sandbox, disabled local scheduler, four bounded local/remote placement modes, private cross-device continuity, and first-party IDE clients.
 
 ## Source and License Status
 
@@ -43,6 +45,11 @@ Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be publish
 - [Local Model Feasibility Advisor](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/12-local-model-feasibility-advisor.md)
 - [Multi-Runtime Local and On-Device Inference](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/13-multi-runtime-local-inference.md)
 - [Durable Memory and Reversible Learning](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/14-durable-memory-lifecycle.md)
+- [Local Background Scheduler](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/15-local-background-scheduler.md)
+- [Execution Sandbox Strategy](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/16-execution-sandbox-strategy.md)
+- [Context Efficiency and Observability](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/17-context-efficiency-observability.md)
+- [Execution Placement and Elastic Parallelism](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/18-execution-placement-parallelism.md)
+- [Capacity and Quota Dashboard](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/19-capacity-quota-dashboard.md)
 
 ## Helpful Evaluation Sources
 
@@ -55,6 +62,8 @@ Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be publish
 - [Recursive Language Models paper](https://arxiv.org/abs/2512.24601)
 - [Letta Code](https://github.com/letta-ai/letta-code), [jcode](https://github.com/1jehuang/jcode), and [Prime Agent](https://github.com/PrimeIntellect-ai/prime-agent)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Agent Client Protocol](https://agentclientprotocol.com/)
+- [NVIDIA OpenShell](https://github.com/NVIDIA/OpenShell), [Background Agents](https://github.com/ColeMurray/background-agents), [Open SWE](https://github.com/langchain-ai/open-swe), and [firstmate](https://github.com/kunchenguid/firstmate)
 - [MCP.Directory](https://mcp.directory/) and [MCP Playground](https://www.mcpplayground.tech/)
 - [ToolRadar documentation](https://toolradar.com/docs)
 - [IndiaAI](https://indiaai.gov.in/) and [AIKosh](https://aikosh.indiaai.gov.in/)
