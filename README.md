@@ -13,6 +13,7 @@ Project xCopilot is the planned public distribution name for xCopilot: a local-f
 - MCP client and local MCP Lab for inspect/lint/health/diff/test before enablement.
 - **Can I run it locally?** calculator for model/quantization fit, workload-based response-time ranges, and optional measured local benchmarks.
 - Tiered multi-runtime local inference: managed llama.cpp, dedicated Ollama service support, profiled local APIs, role-specific deployments, and central RAM/VRAM/concurrency scheduling.
+- Future privacy-first durable project/user memory with provenance, explicit forget/redact/rollback, and evaluated reversible skill learning.
 - Future Plugin SDK/registry, ToolRadar reference plugin, private cross-device continuity, and IDE/ACP clients.
 
 ## Source and License Status
@@ -29,7 +30,7 @@ There is no valid installation command yet. Future Windows installation will:
 2. verify the expected Authenticode publisher;
 3. verify a signed checksum manifest and package hash;
 4. execute only after verification;
-5. ask separately before installing Ollama or downloading a model.
+5. ask separately before installing any optional runtime or downloading a model.
 
 Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be published.
 
@@ -41,6 +42,7 @@ Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be publish
 - [Deep document review](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/11-document-review.md)
 - [Local Model Feasibility Advisor](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/12-local-model-feasibility-advisor.md)
 - [Multi-Runtime Local and On-Device Inference](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/13-multi-runtime-local-inference.md)
+- [Durable Memory and Reversible Learning](https://github.com/narinderparmar/xCopilot-Concept/blob/main/docs/14-durable-memory-lifecycle.md)
 
 ## Helpful Evaluation Sources
 
@@ -51,6 +53,7 @@ Mutable-branch `irm .../main/install.ps1 | iex` instructions will not be publish
 - [llama.cpp](https://github.com/ggml-org/llama.cpp), [MLC-LLM](https://github.com/mlc-ai/mlc-llm), [WebLLM](https://github.com/mlc-ai/web-llm), and [LiteRT-LM](https://github.com/google-ai-edge/LiteRT-LM)
 - [Hugging Face JavaScript](https://huggingface.co/docs/huggingface.js/index)
 - [Recursive Language Models paper](https://arxiv.org/abs/2512.24601)
+- [Letta Code](https://github.com/letta-ai/letta-code), [jcode](https://github.com/1jehuang/jcode), and [Prime Agent](https://github.com/PrimeIntellect-ai/prime-agent)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [MCP.Directory](https://mcp.directory/) and [MCP Playground](https://www.mcpplayground.tech/)
 - [ToolRadar documentation](https://toolradar.com/docs)
