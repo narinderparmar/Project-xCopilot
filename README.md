@@ -4,6 +4,15 @@
 
 Project xCopilot is the planned public distribution name for xCopilot: a local-first coding assistant with a Node.js/TypeScript CLI and authenticated locally hosted Web UI. It is designed to use local models by default and to reject paid/metered model inference.
 
+This repository is the canonical home for end-user documentation and future release artifacts. Private implementation source, developer setup, tests, and engineering evidence remain in the separate `xCopilot Source` repository.
+
+## User Documentation
+
+- [Documentation index](docs/README.md)
+- [Getting started](docs/getting-started.md)
+- [User manual](docs/user-manual.md)
+- [Release artifact policy](releases/README.md)
+
 ## Planned Capabilities
 
 - Repository-aware chat and approved single/multi-file edits.
@@ -21,7 +30,8 @@ Project xCopilot is the planned public distribution name for xCopilot: a local-f
 ## Source and License Status
 
 - Core implementation source is private and is **not currently open source**.
-- A future release may provide signed binaries, PowerShell installers, manifests, SBOM/provenance, and documentation from this public distribution project.
+- This repository does not contain the private implementation source.
+- A future release may provide signed binaries, PowerShell installers, manifests, SBOM/provenance, and documentation from this public distribution project through GitHub Releases.
 - The intended use is non-commercial, but the complete product license, third-party/model notices, distribution rights, and signing identity are not finalized. No public artifact should be distributed until those release blockers are resolved.
 
 ## Installation Safety
