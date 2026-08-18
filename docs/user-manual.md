@@ -6,6 +6,21 @@
 
 xCopilot provides a CLI and an authenticated Web interface hosted only by the local Engine. The Engine is the policy authority for model access, project permissions, approvals, resource limits, and audit records.
 
+## Current Source-Preview CLI
+
+| Command | Behavior |
+| --- | --- |
+| `xcopilot` | Opens a durable conversation for the current repository. |
+| `xcopilot ask "<prompt>"` | Creates one durable session and streams one local-model response. |
+| `xcopilot serve` | Starts the loopback-only Engine and locally hosted Web app. |
+| `/model` | Shows configured deployments; `/model <id>` selects one for later turns. |
+| `/clear` | Starts a fresh conversation without deleting prior durable history. |
+| `/help` | Shows interactive commands. |
+| `/exit` | Closes the CLI. |
+| `Ctrl+C` | Cancels the exact active generation; a second interrupt aborts the client request. |
+
+The CLI never calls a model runtime directly. It authenticates to the local Engine, uses bounded newline-delimited streaming, and records the user message, selected model, final assistant message, terminal status, and available token/timing metrics. If no approved deployment is configured, the REPL stays open and reports that state; it does not fall back to a paid or unknown model.
+
 ## Manual Contents
 
 1. **Install and update** — verified release download, signature/checksum validation, supported platforms, update, repair, and uninstall.
