@@ -1,10 +1,12 @@
 # Project xCopilot
 
-**Status: concept and SDLC planning only. No supported binary or installer has been released.**
+**Status: pre-release implementation. No supported binary or installer has been released.**
 
 Project xCopilot is the planned public distribution name for xCopilot: a local-first coding assistant with a Node.js/TypeScript CLI and authenticated locally hosted Web UI. It is designed to use local models by default and to reject paid/metered model inference.
 
 This repository is the canonical home for end-user documentation and future release artifacts. Private implementation source, developer setup, tests, and engineering evidence remain in the separate `xCopilot Source` repository.
+
+The private source preview now includes durable local sessions and the first interactive CLI (`xcopilot`, `xcopilot ask`, and `xcopilot serve`). This does not change the release warning: no artifact in this repository is currently supported for installation.
 
 ## User Documentation
 
