@@ -13,6 +13,10 @@ xCopilot provides a CLI and an authenticated Web interface hosted only by the lo
 | `xcopilot` | Opens a durable conversation for the current repository. |
 | `xcopilot ask "<prompt>"` | Creates one durable session and streams one local-model response. |
 | `xcopilot serve` | Starts the loopback-only Engine and locally hosted Web app. |
+| `xcopilot models list` | Lists exact cataloged model previews, transfer state, installation state, and active selection. |
+| `xcopilot models refresh [--id <model-id>]` | Rechecks one or all pinned previews and invalidates stale eligibility or selection. |
+| `xcopilot models pull ...` | Previews an exact Hugging Face GGUF; `--approve` explicitly starts the verified pull. |
+| `xcopilot models set --id <model-id>` | Selects one currently valid installed artifact without starting a runtime. |
 | `/model` | Shows configured deployments; `/model <id>` selects one for later turns. |
 | `/file <path>[#Lx-Ly]` | Reads one permitted repository text file as bounded untrusted context. |
 | `/propose <path> => <text>` | Creates a durable one-file diff without writing the worktree. |
@@ -44,6 +48,27 @@ The locally hosted Web client opens only through the Engine's one-use browser bo
 Reloading the page restores the selected durable session. If a generation start is durable but its terminal event is still pending, the Web client identifies that exact operation, blocks a conflicting prompt, and allows replay or cancellation. Authentication failures, replay failures, no-session, no-model, interrupted-stream, and cancellation failures are shown explicitly rather than presented as successful responses.
 
 The Web interface includes semantic landmarks and headings, associated form labels, visible keyboard focus, disabled/busy states, a concise live status region, and readable errors. Incremental model tokens are not repeatedly announced through the conversation live region.
+
+## Safe Model Artifact Management
+
+Model management is available only through the authenticated local Engine. The CLI and Web client do not write downloads into the open repository and do not call Hugging Face directly.
+
+Every candidate begins with a metadata-only preview bound to one exact Hugging Face repository, immutable commit revision, and repository-relative GGUF file. Before any model bytes transfer, xCopilot displays and persists:
+
+- normalized repository, revision, and file identity;
+- declared license and free-eligibility decision;
+- public, gated, private, and disabled state;
+- exact non-zero byte size;
+- publisher SHA-256 and storage evidence; and
+- the reasons behind the eligibility decision.
+
+An explicit approval is valid only for that exact preview digest. The Engine streams the approved body with bounded memory into private staging, validates every approved HTTPS redirect, checks disk headroom and content length, refuses byte overruns, verifies GGUF magic, exact size, and SHA-256, flushes the file, and atomically exposes only a complete verified installation. Absolute local paths are never returned to clients.
+
+Use **Cancel transfer** in the Web panel or `Ctrl+C` while the CLI is waiting for a pull. Cancellation aborts the exact operation, removes partial staging, and records a non-success terminal state. Startup recovery also removes orphan staging and marks interrupted work explicitly rather than assuming installation succeeded.
+
+Use **Refresh catalog** or `xcopilot models refresh` before relying on older metadata. Changed or unconfirmed revision, file, license, gated/private/disabled state, size, or hash invalidates prior approval and clears active eligibility. Installed bytes may remain in private storage, but they cannot be selected until a current safe preview is approved and installed. At most one currently valid installed artifact can be active, and pull never activates it automatically.
+
+Model-artifact selection and chat deployment selection are separate. `xcopilot models set` records the approved installed artifact; it does not launch llama.cpp, Ollama, or another runtime. Chat still requires a compatible prepared deployment exposed by the Engine.
 
 ## Safe File Workflow
 

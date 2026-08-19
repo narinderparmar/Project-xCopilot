@@ -37,6 +37,37 @@ The Web app remembers only the selected session identity in same-origin browser 
 
 When no approved prepared model is configured, session creation, selection, and history replay remain available in both clients. Prompt submission stays disabled and xCopilot does not silently download, invent, or select a paid/unknown deployment. Local connection and model-readiness checks remain available under **Local readiness diagnostics**.
 
+### Safe local model artifacts
+
+The Web **Model management** panel separates assessment, transfer, and selection:
+
+1. enter an exact Hugging Face `namespace/repository`, 40-character revision, and GGUF file path;
+2. choose **Preview exact model** without downloading the model body;
+3. review the displayed revision, license, public/gated state, exact byte size, SHA-256, and eligibility evidence;
+4. choose **Approve and pull exact artifact** only when every fact matches your intended artifact;
+5. use **Cancel transfer** to stop the exact active download and clean partial staging; and
+6. after a verified install, choose **Set active** explicitly.
+
+Pull never selects a model automatically. **Refresh** rechecks the pinned metadata and disables stale approval or active selection when the revision, file, license, availability, size, or hash changes or cannot be confirmed.
+
+The equivalent CLI workflow is deliberately two-step so the preview can be reviewed before approval:
+
+```powershell
+node .\cli\dist\index.js models pull `
+  --repository Qwen/Qwen2.5-Coder-0.5B-Instruct-GGUF `
+  --revision ebb2015119c907b064c512bf053e945850b5875f `
+  --file qwen2.5-coder-0.5b-instruct-q4_k_m.gguf
+
+node .\cli\dist\index.js models pull --id <model-id> --approve
+node .\cli\dist\index.js models set --id <model-id>
+node .\cli\dist\index.js models list
+node .\cli\dist\index.js models refresh --id <model-id>
+```
+
+Press `Ctrl+C` during an approved CLI pull to request cancellation. xCopilot accepts only a currently verified, public, free-license-eligible, single-file GGUF artifact with an exact publisher SHA-256 and bounded size. It refuses unsafe formats, unverified or gated/private metadata, redirects outside its HTTPS allowlist, size/hash/content mismatches, insufficient disk headroom, and partial installations.
+
+An active artifact is a trusted catalog selection, not a running chat deployment. Chat remains unavailable until an approved local runtime exposes a compatible prepared deployment through the Engine.
+
 ### Safe file context and one-file changes
 
 To include a repository file in one model request, put the directive on its own prompt line:
