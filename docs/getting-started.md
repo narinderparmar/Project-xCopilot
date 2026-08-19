@@ -127,6 +127,31 @@ node .\cli\dist\index.js runtimes unload <runtime-id>
 
 Registration never silently enables or starts a runtime. Only enabled, ready, non-diagnostic deployments are offered to chat. Pending actions, stale model bindings, offline services, unexpected managed-process exits, identity mismatches, and unresolved cleanup are shown explicitly and removed from routing.
 
+### Check whether a model can run locally
+
+The Web **Can I run it locally?** panel loads a redacted local hardware profile and uses the same catalog and runtime registrations shown elsewhere in the app:
+
+1. select the exact cataloged model artifact;
+2. choose all registered runtimes or one exact runtime;
+3. choose Code completion, Interactive chat, Agentic edit, Code/PR review, or bounded RLM repository analysis;
+4. optionally override context tokens, output tokens, or concurrency; and
+5. choose **Assess local fit**.
+
+The result shows compatibility, memory and disk fit, broad static response-time ranges, confidence, evidence, and suggested constraints. The assessment does not download the artifact, start or load a runtime, run a prompt, send hardware data away from the device, or claim that faster inference means better coding quality.
+
+When a managed llama.cpp registration is currently bound to another GGUF, xCopilot can still estimate the selected artifact but marks runtime reconfiguration as required and will not call it **Recommended**. Ollama assessments require the exact verified artifact identity.
+
+Equivalent CLI commands are:
+
+```powershell
+node .\cli\dist\index.js doctor --hardware
+node .\cli\dist\index.js models can-run <model-id>
+node .\cli\dist\index.js models can-run <model-id> --runtime <runtime-id> --workload interactive-chat-v1 --context 8192
+node .\cli\dist\index.js runtimes compare <model-id> --workload rlm-repository-analysis-v1
+```
+
+Use `--json` when another local tool needs the same structured result. The first source-preview release provides static estimates only; optional measured benchmarks remain planned.
+
 ### Safe file context and one-file changes
 
 To include a repository file in one model request, put the directive on its own prompt line:

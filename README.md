@@ -6,7 +6,7 @@ Project xCopilot is the planned public distribution name for xCopilot: a local-f
 
 This repository is the canonical home for end-user documentation and future release artifacts. Private implementation source, developer setup, tests, and engineering evidence remain in the separate `xCopilot Source` repository.
 
-The private source preview now includes durable local sessions, the interactive CLI (`xcopilot`, `xcopilot ask`, and `xcopilot serve`), an authenticated locally hosted Web chat, safe local model-artifact preview/pull/selection, a durable local Runtime Manager, safe repository-file context, and one-file diff approval/undo. Both clients use the same Engine session history, model-artifact catalog, ownership-gated runtime state, prepared local-model deployments, streaming, exact-operation cancellation, and file-safety policy. This does not change the release warning: no artifact in this repository is currently supported for installation.
+The private source preview now includes durable local sessions, the interactive CLI (`xcopilot`, `xcopilot ask`, and `xcopilot serve`), an authenticated locally hosted Web chat, safe local model-artifact preview/pull/selection, a durable local Runtime Manager, a static local-model Feasibility Advisor, safe repository-file context, and one-file diff approval/undo. Both clients use the same Engine session history, model-artifact catalog, ownership-gated runtime state, redacted hardware/workload assessments, prepared local-model deployments, streaming, exact-operation cancellation, and file-safety policy. This does not change the release warning: no artifact in this repository is currently supported for installation.
 
 ## User Documentation
 
@@ -22,7 +22,7 @@ The private source preview now includes durable local sessions, the interactive 
 - Dedicated local/PR code-review mode.
 - Bounded Recursive Language Model (RLM) handling for oversized inputs.
 - MCP client and local MCP Lab for inspect/lint/health/diff/test before enablement.
-- **Can I run it locally?** calculator for model/quantization fit, workload-based response-time ranges, and optional measured local benchmarks.
+- **Can I run it locally?** calculator for model/quantization fit and workload-based static response-time ranges; optional measured local benchmarks remain planned.
 - Tiered multi-runtime local inference: managed llama.cpp, dedicated Ollama service support, profiled local APIs, role-specific deployments, and central RAM/VRAM/concurrency scheduling.
 - Capacity & Quota dashboard showing active/queued workload, local model resources, hosted free-model consumption/reservations, exact next reset or rolling recovery, and future remote-runner capacity.
 - Measured prompt/cache/context efficiency through deterministic manifests, local context bills, cache evidence, and quality-preserving regression budgets.
