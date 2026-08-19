@@ -14,6 +14,12 @@ xCopilot provides a CLI and an authenticated Web interface hosted only by the lo
 | `xcopilot ask "<prompt>"` | Creates one durable session and streams one local-model response. |
 | `xcopilot serve` | Starts the loopback-only Engine and locally hosted Web app. |
 | `/model` | Shows configured deployments; `/model <id>` selects one for later turns. |
+| `/file <path>[#Lx-Ly]` | Reads one permitted repository text file as bounded untrusted context. |
+| `/propose <path> => <text>` | Creates a durable one-file diff without writing the worktree. |
+| `/diff [proposal-id]` | Displays the latest or exact durable proposal and state. |
+| `/approve [proposal-id]` | Revalidates and applies the exact proposal after an explicit decision. |
+| `/reject [proposal-id]` | Durably rejects the proposal without changing the file. |
+| `/undo [proposal-id]` | Restores exact prior bytes when the applied file has not changed. |
 | `/clear` | Starts a fresh conversation without deleting prior durable history. |
 | `/help` | Shows interactive commands. |
 | `/exit` | Closes the CLI. |
@@ -38,6 +44,24 @@ The locally hosted Web client opens only through the Engine's one-use browser bo
 Reloading the page restores the selected durable session. If a generation start is durable but its terminal event is still pending, the Web client identifies that exact operation, blocks a conflicting prompt, and allows replay or cancellation. Authentication failures, replay failures, no-session, no-model, interrupted-stream, and cancellation failures are shown explicitly rather than presented as successful responses.
 
 The Web interface includes semantic landmarks and headings, associated form labels, visible keyboard focus, disabled/busy states, a concise live status region, and readable errors. Incremental model tokens are not repeatedly announced through the conversation live region.
+
+## Safe File Workflow
+
+xCopilot clients never read or write repository files directly. Every operation goes through the authenticated local Engine and the durable session's canonical repository.
+
+For model context, use a standalone `@file <relative-path>` prompt line. Add `#L<start>-L<end>` to select a bounded line range. Up to four directives and 64 KiB of combined context are accepted per request. Repository text is always marked as untrusted data and cannot change policy or approve an action.
+
+A single-file transaction follows these steps:
+
+1. load one permitted UTF-8 text file;
+2. edit the exact replacement text;
+3. create and review a durable unified diff while the worktree remains unchanged;
+4. explicitly approve or reject the proposal; and
+5. optionally undo an applied proposal while the replacement still matches exactly.
+
+Approval rechecks the repository, path, ignore/credential/binary/size/link policy, current file identity, and base hash. A changed target returns a conflict rather than overwriting user work. The replacement is staged, flushed, atomically installed, reopened, and verified. Interrupted apply/undo transitions are reconciled before the Engine becomes ready; unknown or partial target bytes stop readiness instead of being guessed.
+
+The safe-file policy refuses absolute or traversing paths, mount crossings, `.gitignore`/`.xcopilotignore` matches, generated/vendor defaults, credential-like paths/content, binary or invalid UTF-8/control-heavy data, oversized files, symlinks, junctions, reparse points, and path-identity races. There is no broad ignore override in this preview.
 
 ## Manual Contents
 
