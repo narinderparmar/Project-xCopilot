@@ -17,6 +17,13 @@ xCopilot provides a CLI and an authenticated Web interface hosted only by the lo
 | `xcopilot models refresh [--id <model-id>]` | Rechecks one or all pinned previews and invalidates stale eligibility or selection. |
 | `xcopilot models pull ...` | Previews an exact Hugging Face GGUF; `--approve` explicitly starts the verified pull. |
 | `xcopilot models set --id <model-id>` | Selects one currently valid installed artifact without starting a runtime. |
+| `xcopilot runtimes discover ...` | Performs a read-only exact runtime preview without registration. |
+| `xcopilot runtimes register ...` | Rediscovers and registers the exact candidate in a disabled state. |
+| `xcopilot runtimes list` | Lists registration, role, trust, ownership, lifecycle, reservation, errors, and allowed actions. |
+| `xcopilot runtimes status <runtime-id>` | Shows one exact registered runtime and deployment identity. |
+| `xcopilot runtimes enable\|disable <runtime-id>` | Explicitly permits or removes the registration from eligible use. |
+| `xcopilot runtimes start\|stop <runtime-id>` | Controls only an xCopilot-managed llama.cpp child. |
+| `xcopilot runtimes load\|unload <runtime-id>` | Controls only approved model residency in a user-managed Ollama service. |
 | `/model` | Shows configured deployments; `/model <id>` selects one for later turns. |
 | `/file <path>[#Lx-Ly]` | Reads one permitted repository text file as bounded untrusted context. |
 | `/propose <path> => <text>` | Creates a durable one-file diff without writing the worktree. |
@@ -43,6 +50,7 @@ The locally hosted Web client opens only through the Engine's one-use browser bo
 | **Prepared local model** | Selects only a deployment already approved and exposed by the Engine. |
 | **Send one prompt** | Streams one bounded response and reports terminal token/timing metrics when available. |
 | **Stop active response** | Cancels the exact active or reload-recovered operation. |
+| **Runtime management** | Discovers, registers, enables, and applies only ownership-allowed lifecycle actions to exact local runtimes. |
 | **Local readiness diagnostics** | Checks the Engine connection, live events, and prepared model readiness. |
 
 Reloading the page restores the selected durable session. If a generation start is durable but its terminal event is still pending, the Web client identifies that exact operation, blocks a conflicting prompt, and allows replay or cancellation. Authentication failures, replay failures, no-session, no-model, interrupted-stream, and cancellation failures are shown explicitly rather than presented as successful responses.
@@ -69,6 +77,33 @@ Use **Cancel transfer** in the Web panel or `Ctrl+C` while the CLI is waiting fo
 Use **Refresh catalog** or `xcopilot models refresh` before relying on older metadata. Changed or unconfirmed revision, file, license, gated/private/disabled state, size, or hash invalidates prior approval and clears active eligibility. Installed bytes may remain in private storage, but they cannot be selected until a current safe preview is approved and installed. At most one currently valid installed artifact can be active, and pull never activates it automatically.
 
 Model-artifact selection and chat deployment selection are separate. `xcopilot models set` records the approved installed artifact; it does not launch llama.cpp, Ollama, or another runtime. Chat still requires a compatible prepared deployment exposed by the Engine.
+
+## Local Runtime Management
+
+Runtime management is available only through the authenticated local Engine. Discovery is read-only and bounded; registration repeats discovery, verifies the exact digest, persists the candidate disabled, and never silently starts a process or loads a model.
+
+Every registration displays:
+
+- its deployment role, exact model/deployment identity, trust class, and lifecycle owner;
+- enabled, lifecycle, and pending-action state;
+- resource pool, reservation, and lease identity when applicable;
+- discovery/configuration digests and observations;
+- the most recent safe error and recovery direction; and
+- only the lifecycle actions permitted for that ownership profile.
+
+The current source preview supports three profiles:
+
+| Profile | Ownership | Allowed control |
+| --- | --- | --- |
+| Managed llama.cpp | `xcopilot_managed`, verified local artifacts | Enable/disable and start/stop the exact xCopilot child. |
+| Dedicated Ollama | `user_managed`, externally unverified service | Enable/disable and load/unload the approved exact model; never start/stop the daemon. |
+| Generic loopback | `user_managed`, externally unverified diagnostic | Register, inspect, enable/disable for diagnostics only; never automatic chat routing. |
+
+Managed llama.cpp runs in a private isolated working directory. Before it is considered ready, the Engine persists the resource lease and a recovery handle bound to the exact executable, process ID, stable process start time, launch arguments, and approved working root. Startup and shutdown recover every persisted owned child. An identity mismatch fails closed and blocks reuse of the affected resource pool until resolved; xCopilot never terminates an unverified process. Unexpected exits immediately remove the deployment from chat, release its reservation, and retain safe cleanup state when needed.
+
+Only enabled, ready, non-diagnostic deployments are exposed to CLI/Web chat. Pending lifecycle changes, stale or inactive model artifacts, unavailable external services, failed cleanup, and missing active adapters are excluded. An in-flight response keeps the immutable deployment selected at dispatch even if that runtime is disabled or stopped concurrently.
+
+Registration and mutation requests use exact idempotency keys plus descriptor/current-deployment compare-and-set values. Identical retained retries return the original success or error. Conflicting key reuse, stale deployment state, and expired retained outcomes return explicit errors instead of being treated as success.
 
 ## Safe File Workflow
 
