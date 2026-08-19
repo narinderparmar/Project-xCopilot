@@ -6,7 +6,7 @@ Project xCopilot is the planned public distribution name for xCopilot: a local-f
 
 This repository is the canonical home for end-user documentation and future release artifacts. Private implementation source, developer setup, tests, and engineering evidence remain in the separate `xCopilot Source` repository.
 
-The private source preview now includes durable local sessions, the interactive CLI (`xcopilot`, `xcopilot ask`, and `xcopilot serve`), an authenticated locally hosted Web chat, safe local model-artifact preview/pull/selection, safe repository-file context, and one-file diff approval/undo. Both clients use the same Engine session history, model-artifact catalog, prepared local-model deployments, streaming, exact-operation cancellation, and file-safety policy. This does not change the release warning: no artifact in this repository is currently supported for installation.
+The private source preview now includes durable local sessions, the interactive CLI (`xcopilot`, `xcopilot ask`, and `xcopilot serve`), an authenticated locally hosted Web chat, safe local model-artifact preview/pull/selection, a durable local Runtime Manager, safe repository-file context, and one-file diff approval/undo. Both clients use the same Engine session history, model-artifact catalog, ownership-gated runtime state, prepared local-model deployments, streaming, exact-operation cancellation, and file-safety policy. This does not change the release warning: no artifact in this repository is currently supported for installation.
 
 ## User Documentation
 

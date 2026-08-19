@@ -68,6 +68,65 @@ Press `Ctrl+C` during an approved CLI pull to request cancellation. xCopilot acc
 
 An active artifact is a trusted catalog selection, not a running chat deployment. Chat remains unavailable until an approved local runtime exposes a compatible prepared deployment through the Engine.
 
+### Register and control a local runtime
+
+The Web **Runtime management** panel keeps discovery, registration, enablement, and process/model residency separate:
+
+1. choose managed llama.cpp, dedicated Ollama, or diagnostic loopback;
+2. enter the exact local path or loopback endpoint and assign a deployment role;
+3. choose **Discover** and review trust, ownership, model identity, warnings, and configuration/discovery digests;
+4. choose **Register** only when the preview matches the intended runtime;
+5. explicitly enable the registration; and
+6. use only the actions allowed by its ownership.
+
+A managed llama.cpp registration can be started and stopped by xCopilot. A dedicated Ollama registration can load or unload the approved model but xCopilot never starts or stops the user-owned daemon. A generic loopback registration is diagnostic-only and cannot become an automatic chat route.
+
+Equivalent CLI inspection and lifecycle commands are:
+
+```powershell
+node .\cli\dist\index.js runtimes list
+node .\cli\dist\index.js runtimes status <runtime-id>
+node .\cli\dist\index.js runtimes enable <runtime-id>
+node .\cli\dist\index.js runtimes start <runtime-id>
+node .\cli\dist\index.js runtimes stop <runtime-id>
+node .\cli\dist\index.js runtimes disable <runtime-id>
+```
+
+Preview and register managed llama.cpp with the same exact arguments:
+
+```powershell
+$runtimeArgs = @(
+  "--kind", "managed_llama_cpp",
+  "--role", "chat_edit",
+  "--runtime-dir", "C:\path\to\verified-llama.cpp",
+  "--backend", "cpu",
+  "--acceleration", "x64",
+  "--device-pool", "system-memory",
+  "--context-window", "2048",
+  "--max-concurrent", "1",
+  "--threads", "4"
+)
+node .\cli\dist\index.js runtimes discover @runtimeArgs
+node .\cli\dist\index.js runtimes register @runtimeArgs
+```
+
+For the pinned source-preview Ollama profile, first start and verify Ollama yourself, then preview/register its exact loopback endpoint and local blob:
+
+```powershell
+node .\cli\dist\index.js runtimes register `
+  --kind ollama_service `
+  --role chat_edit `
+  --endpoint http://127.0.0.1:11434 `
+  --profile ollama-xcopilot-readiness-q4 `
+  --artifact-path C:\path\to\exact\ollama-blob `
+  --max-concurrent 1
+
+node .\cli\dist\index.js runtimes load <runtime-id>
+node .\cli\dist\index.js runtimes unload <runtime-id>
+```
+
+Registration never silently enables or starts a runtime. Only enabled, ready, non-diagnostic deployments are offered to chat. Pending actions, stale model bindings, offline services, unexpected managed-process exits, identity mismatches, and unresolved cleanup are shown explicitly and removed from routing.
+
 ### Safe file context and one-file changes
 
 To include a repository file in one model request, put the directive on its own prompt line:
