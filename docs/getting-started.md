@@ -37,6 +37,32 @@ The Web app remembers only the selected session identity in same-origin browser 
 
 When no approved prepared model is configured, session creation, selection, and history replay remain available in both clients. Prompt submission stays disabled and xCopilot does not silently download, invent, or select a paid/unknown deployment. Local connection and model-readiness checks remain available under **Local readiness diagnostics**.
 
+### Safe file context and one-file changes
+
+To include a repository file in one model request, put the directive on its own prompt line:
+
+```text
+@file src/example.ts
+@file src/example.ts#L10-L40
+```
+
+The Engine reads the file from the durable session's repository, labels it as untrusted context with no authorization, and keeps the prompt itself unchanged in history.
+
+The Web **Safe file context and diff** panel can load one permitted text file, edit exact replacement text, and create a durable diff without writing the worktree. Review the diff, then choose **Approve exact proposal** or **Reject proposal**. **Undo latest applicable edit** restores the exact prior bytes only when the file still matches the applied replacement.
+
+Equivalent CLI commands are:
+
+```text
+/file src/example.ts#L10-L40
+/propose src/example.ts => "exact replacement text\n"
+/diff
+/approve
+/reject
+/undo
+```
+
+Approval and undo refuse to overwrite a file changed since the proposal or apply step. Absolute/traversing paths, ignored/generated/vendor files, credential-like paths or content, binaries, invalid UTF-8, oversized files, links/junctions/reparse points, and uncertain path identity are refused explicitly.
+
 After a source build, the command equivalents are:
 
 ```powershell
