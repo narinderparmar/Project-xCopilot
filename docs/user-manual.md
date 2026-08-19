@@ -21,6 +21,24 @@ xCopilot provides a CLI and an authenticated Web interface hosted only by the lo
 
 The CLI never calls a model runtime directly. It authenticates to the local Engine, uses bounded newline-delimited streaming, and records the user message, selected model, final assistant message, terminal status, and available token/timing metrics. If no approved deployment is configured, the REPL stays open and reports that state; it does not fall back to a paid or unknown model.
 
+## Current Source-Preview Web Chat
+
+The locally hosted Web client opens only through the Engine's one-use browser bootstrap URL. It does not connect to a model runtime directly or load third-party Web assets.
+
+| Control | Behavior |
+| --- | --- |
+| **Create durable session** | Creates a repository chat from an explicit local path and optional title. |
+| **Sessions** | Selects an existing durable conversation shared with the CLI/API. |
+| **Replay history** | Reloads ordered durable events without duplicating messages. |
+| **Prepared local model** | Selects only a deployment already approved and exposed by the Engine. |
+| **Send one prompt** | Streams one bounded response and reports terminal token/timing metrics when available. |
+| **Stop active response** | Cancels the exact active or reload-recovered operation. |
+| **Local readiness diagnostics** | Checks the Engine connection, live events, and prepared model readiness. |
+
+Reloading the page restores the selected durable session. If a generation start is durable but its terminal event is still pending, the Web client identifies that exact operation, blocks a conflicting prompt, and allows replay or cancellation. Authentication failures, replay failures, no-session, no-model, interrupted-stream, and cancellation failures are shown explicitly rather than presented as successful responses.
+
+The Web interface includes semantic landmarks and headings, associated form labels, visible keyboard focus, disabled/busy states, a concise live status region, and readable errors. Incremental model tokens are not repeatedly announced through the conversation live region.
+
 ## Manual Contents
 
 1. **Install and update** — verified release download, signature/checksum validation, supported platforms, update, repair, and uninstall.
