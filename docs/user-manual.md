@@ -26,6 +26,8 @@ xCopilot provides a CLI and an authenticated Web interface hosted only by the lo
 | `xcopilot runtimes start\|stop <runtime-id>` | Controls only an xCopilot-managed llama.cpp child. |
 | `xcopilot runtimes load\|unload <runtime-id>` | Controls only approved model residency in a user-managed Ollama service. |
 | `xcopilot runtimes compare <model-id>` | Compares the same artifact/workload across all registered runtimes. |
+| `xcopilot capacity status` | Shows reconciled local pools, resident deployments, active leases, queue, reserved capacity, and available capacity. |
+| `xcopilot capacity explain <runtime-or-deployment-id>` | Explains one registration's pool, reservation, queue, and estimated release state. |
 | `xcopilot doctor --hardware` | Shows the redacted local CPU, memory-pool, and model-store capacity profile. |
 | `/model` | Shows configured deployments; `/model <id>` selects one for later turns. |
 | `/file <path>[#Lx-Ly]` | Reads one permitted repository text file as bounded untrusted context. |
@@ -54,6 +56,7 @@ The locally hosted Web client opens only through the Engine's one-use browser bo
 | **Send one prompt** | Streams one bounded response and reports terminal token/timing metrics when available. |
 | **Stop active response** | Cancels the exact active or reload-recovered operation. |
 | **Runtime management** | Discovers, registers, enables, and applies only ownership-allowed lifecycle actions to exact local runtimes. |
+| **Capacity & quota** | Shows scheduler-authoritative local capacity, resident runtimes, active leases, queued work, and estimated capacity return without a fake reset. |
 | **Can I run it locally?** | Selects an exact cataloged artifact, runtime scope, workload, and bounded overrides, then shows static local fit evidence. |
 | **Local readiness diagnostics** | Checks the Engine connection, live events, and prepared model readiness. |
 
@@ -131,6 +134,35 @@ node .\cli\dist\index.js runtimes compare <model-id> --workload rlm-repository-a
 ```
 
 Omit the model id from `models can-run` to use the active artifact. Add `--json` for the shared API response. Assessment does not download an artifact, start/load a runtime, run inference, expose identifying hardware fields, or transmit hardware data. Static throughput is not a coding-quality score or a guarantee that a deployment will meet every task requirement. Empirical benchmark execution and history remain a later feature.
+
+## Local Capacity & Quota
+
+The current source preview implements the local subset of the Capacity & Quota dashboard. The Resource Scheduler is authoritative for every configured pool and reports four independent dimensions:
+
+- memory bytes;
+- CPU threads;
+- sequences; and
+- concurrency.
+
+For every dimension, the displayed values reconcile exactly:
+
+```text
+capacity = reserved + available
+reserved = sum of active lease reservations
+```
+
+The dashboard also shows registered runtime cards, resident state, active leases, FIFO queue position, required queued capacity, waiting dimensions, and the next known capacity return. Release timestamps are estimates, not promises.
+
+External local runtimes share the system-memory budget by default. xCopilot shows a separate external pool only when an independent capacity budget was explicitly configured, avoiding duplicate claims against the same host RAM and CPU.
+
+Local resources do not recharge on a provider window. The API and both clients therefore use lease-completion semantics and keep `localResetAt` as `null`. When no trustworthy release estimate exists, the UI displays `unknown`; it never invents a daily reset or countdown.
+
+```powershell
+node .\cli\dist\index.js capacity status
+node .\cli\dist\index.js capacity explain <runtime-or-deployment-id>
+```
+
+The explain command accepts the registered runtime id, configured deployment id, current deployment id, or current deployment identity SHA-256. Add `--json` for the same authenticated bounded response used by the Web panel.
 
 ## Safe File Workflow
 

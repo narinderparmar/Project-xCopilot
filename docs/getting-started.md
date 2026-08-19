@@ -152,6 +152,29 @@ node .\cli\dist\index.js runtimes compare <model-id> --workload rlm-repository-a
 
 Use `--json` when another local tool needs the same structured result. The first source-preview release provides static estimates only; optional measured benchmarks remain planned.
 
+### Inspect local capacity and queued work
+
+The Web **Capacity & quota** panel reads the same Resource Scheduler state used to admit local runtimes. For each configured pool it shows:
+
+- total scheduler capacity, reserved capacity, and currently available memory, CPU threads, sequences, and concurrency;
+- resident runtime registrations and their current reservation state;
+- exact active leases and FIFO queue entries;
+- the next known capacity return, labeled **Estimated**; and
+- an explicit statement that local resources have no quota reset.
+
+Use **Refresh capacity** after starting, loading, stopping, or unloading a runtime. A missing release time is shown as `unknown`; xCopilot does not invent a countdown.
+
+Ollama and other external local runtimes share the system-memory capacity budget by default, so the dashboard does not count the same host RAM or CPU twice. A separate external pool appears only when an independent capacity budget has been explicitly configured.
+
+Equivalent CLI commands are:
+
+```powershell
+node .\cli\dist\index.js capacity status
+node .\cli\dist\index.js capacity explain <runtime-or-deployment-id>
+```
+
+Add `--json` for the same bounded API response. Local `localResetAt` is always `null`; memory and execution slots return only when the corresponding lease is released.
+
 ### Safe file context and one-file changes
 
 To include a repository file in one model request, put the directive on its own prompt line:
