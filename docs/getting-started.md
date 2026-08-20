@@ -28,12 +28,14 @@ In the Web app:
 
 1. enter the repository path and optionally a session title;
 2. create or select a durable chat session;
-3. choose an explicitly prepared local model when one is available;
+3. use the Engine-provided **Automatic** route or explicitly choose a model labelled **explicit only**;
 4. send one prompt and watch the bounded response stream;
 5. use **Stop active response** to cancel the exact current operation; and
 6. use **Replay history** after a reload or interruption to restore ordered durable messages without duplicates.
 
 The Web app remembers only the selected session identity in same-origin browser storage. Authentication remains in an `HttpOnly`, `SameSite=Strict` local Engine session, and browser mutations require the Engine-issued CSRF value. No third-party scripts, fonts, or hosted Web assets are loaded.
+
+Managed llama.cpp deployments that pass strict local-routing checks can appear as the **Automatic** route. Dedicated Ollama remains **explicit only** because a loopback API cannot prove the daemon's process ownership. If only explicit-only models are ready, choose one visibly in the Web selector, pass `--model <deployment-id>` to `xcopilot ask`, or use `/model <deployment-id>` in the REPL. `/model automatic` returns the REPL to the Engine-provided automatic route.
 
 When no approved prepared model is configured, session creation, selection, and history replay remain available in both clients. Prompt submission stays disabled and xCopilot does not silently download, invent, or select a paid/unknown deployment. Local connection and model-readiness checks remain available under **Local readiness diagnostics**.
 
@@ -125,7 +127,9 @@ node .\cli\dist\index.js runtimes load <runtime-id>
 node .\cli\dist\index.js runtimes unload <runtime-id>
 ```
 
-Registration never silently enables or starts a runtime. Only enabled, ready, non-diagnostic deployments are offered to chat. Pending actions, stale model bindings, offline services, unexpected managed-process exits, identity mismatches, and unresolved cleanup are shown explicitly and removed from routing.
+Registration never silently enables or starts a runtime. Only enabled, ready `chat_edit` deployments with generation, streaming, and cancellation support are offered to chat. Pending actions, stale model bindings, offline services, unexpected managed-process exits, identity mismatches, incompatible roles/capabilities, diagnostic profiles, non-loopback endpoints, and unresolved cleanup are removed from routing.
+
+Automatic routing is deterministic and local-only. It uses only strict-routing-eligible deployments, may retry at most three eligible local models after a retryable failure before any response stream begins, and never retries an explicit selection or changes models after output starts. Dedicated Ollama is never an automatic fallback; it runs only after the user selects its exact deployment id.
 
 ### Check whether a model can run locally
 
@@ -207,6 +211,7 @@ After a source build, the command equivalents are:
 node .\cli\dist\index.js serve
 node .\cli\dist\index.js
 node .\cli\dist\index.js ask "Summarize this repository"
+node .\cli\dist\index.js ask --model <deployment-id> "Use this explicit-only local model"
 ```
 
 Interactive CLI and Web prompts require an approved prepared local deployment. The current developer validation uses the small Qwen2.5 Coder 0.5B Q4_K_M model as a compatible local test artifact; Qwen3 1.7B, TinyLlama, GPT-2 Small, and other small models still require a verified compatible runtime/model profile before they can be selected.
