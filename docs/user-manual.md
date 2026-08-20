@@ -29,7 +29,7 @@ xCopilot provides a CLI and an authenticated Web interface hosted only by the lo
 | `xcopilot capacity status` | Shows reconciled local pools, resident deployments, active leases, queue, reserved capacity, and available capacity. |
 | `xcopilot capacity explain <runtime-or-deployment-id>` | Explains one registration's pool, reservation, queue, and estimated release state. |
 | `xcopilot doctor --hardware` | Shows the redacted local CPU, memory-pool, and model-store capacity profile. |
-| `/model` | Shows configured deployments; `/model <id>` selects one for later turns. |
+| `/model` | Shows configured deployments and their `automatic` or `explicit only` policy; `/model <id>` pins one and `/model automatic` restores automatic routing. |
 | `/file <path>[#Lx-Ly]` | Reads one permitted repository text file as bounded untrusted context. |
 | `/propose <path> => <text>` | Creates a durable one-file diff without writing the worktree. |
 | `/diff [proposal-id]` | Displays the latest or exact durable proposal and state. |
@@ -41,7 +41,7 @@ xCopilot provides a CLI and an authenticated Web interface hosted only by the lo
 | `/exit` | Closes the CLI. |
 | `Ctrl+C` | Cancels the exact active generation; a second interrupt aborts the client request. |
 
-The CLI never calls a model runtime directly. It authenticates to the local Engine, uses bounded newline-delimited streaming, and records the user message, selected model, final assistant message, terminal status, and available token/timing metrics. If no approved deployment is configured, the REPL stays open and reports that state; it does not fall back to a paid or unknown model.
+The CLI never calls a model runtime directly. It authenticates to the local Engine, uses bounded newline-delimited streaming, and records the user message, actual dispatched model, final assistant message, terminal status, and available token/timing metrics. Without `--model`, `xcopilot ask` and the REPL use only the Engine-declared automatic local route. If only explicit-only deployments are available, the REPL stays open and requires `/model <id>` while one-shot `ask` requires `--model <id>`; neither falls back to a paid, hosted, diagnostic, or unknown model.
 
 ## Current Source-Preview Web Chat
 
@@ -52,7 +52,7 @@ The locally hosted Web client opens only through the Engine's one-use browser bo
 | **Create durable session** | Creates a repository chat from an explicit local path and optional title. |
 | **Sessions** | Selects an existing durable conversation shared with the CLI/API. |
 | **Replay history** | Reloads ordered durable events without duplicating messages. |
-| **Prepared local model** | Selects only a deployment already approved and exposed by the Engine. |
+| **Prepared local model** | Defaults to the Engine-provided **Automatic** route when available and visibly labels explicit-only deployments that require a user choice. |
 | **Send one prompt** | Streams one bounded response and reports terminal token/timing metrics when available. |
 | **Stop active response** | Cancels the exact active or reload-recovered operation. |
 | **Runtime management** | Discovers, registers, enables, and applies only ownership-allowed lifecycle actions to exact local runtimes. |
@@ -108,7 +108,9 @@ The current source preview supports three profiles:
 
 Managed llama.cpp runs in a private isolated working directory. Before it is considered ready, the Engine persists the resource lease and a recovery handle bound to the exact executable, process ID, stable process start time, launch arguments, and approved working root. Startup and shutdown recover every persisted owned child. An identity mismatch fails closed and blocks reuse of the affected resource pool until resolved; xCopilot never terminates an unverified process. Unexpected exits immediately remove the deployment from chat, release its reservation, and retain safe cleanup state when needed.
 
-Only enabled, ready, non-diagnostic deployments are exposed to CLI/Web chat. Pending lifecycle changes, stale or inactive model artifacts, unavailable external services, failed cleanup, and missing active adapters are excluded. An in-flight response keeps the immutable deployment selected at dispatch even if that runtime is disabled or stopped concurrently.
+Only enabled, ready `chat_edit` deployments with generation, streaming, and cancellation support are exposed to CLI/Web chat. Pending lifecycle changes, stale or inactive model artifacts, unavailable external services, failed cleanup, missing active adapters, incompatible capabilities, diagnostics, and non-loopback endpoints are excluded.
+
+Managed llama.cpp can be an automatic route because xCopilot owns and verifies its process, runtime bundle, model artifact, and loopback endpoint. Dedicated Ollama remains explicit-only because the local API cannot prove daemon process ownership. Automatic candidates are ordered deterministically. A retryable adapter failure may move to the next eligible automatic candidate only before a runtime stream begins, with at most three attempts. Explicit selections, cancellation, non-retryable failures, and failures after stream start never change deployments. An in-flight response keeps the immutable deployment selected at dispatch even if that runtime is disabled or stopped concurrently.
 
 Registration and mutation requests use exact idempotency keys plus descriptor/current-deployment compare-and-set values. Identical retained retries return the original success or error. Conflicting key reuse, stale deployment state, and expired retained outcomes return explicit errors instead of being treated as success.
 
